@@ -71,9 +71,11 @@ hicam::fitness_pt getObjectivePointer(int index)
     case  32: return(std::make_shared<hicam::sphereRastriginWeak_t>(10));
     case  33: return(std::make_shared<hicam::sphereRastriginStrong_t>(10));
     case  34: return(std::make_shared<hicam::MinDistmm_t>());
-    case  35: return(std::make_shared<hicam::BiasVarianceTradeoff_t>(3));
-	  case  36: return(std::make_shared<hicam::BiasVarianceTradeoff_t>(10));
-      
+    case  35: return(std::make_shared<hicam::BiasVarianceTradeoff_t>(1));
+    case  36: return(std::make_shared<hicam::BiasVarianceTradeoff_t>(3));
+    case  37: return(std::make_shared<hicam::BiasVarianceTradeoff_t>(10));
+    case  38: return(std::make_shared<hicam::BiasVarianceTradeoff_t>(25));
+
     case  51: return(std::make_shared<hicam::wfg_t>(1));
     case  52: return(std::make_shared<hicam::wfg_t>(2));
     case  53: return(std::make_shared<hicam::wfg_t>(3));

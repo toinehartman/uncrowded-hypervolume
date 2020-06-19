@@ -63,10 +63,10 @@ namespace hicam
     {
 
       lower.clear();
-      lower.resize(number_of_parameters, -10);
+      lower.resize(number_of_parameters, -100);
 
       upper.clear();
-      upper.resize(number_of_parameters, 10);
+      upper.resize(number_of_parameters, 100);
 
     }
 
