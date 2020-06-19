@@ -46,20 +46,20 @@ namespace hicam
     ~BiasVarianceTradeoff_t() {}
 
     // number of objectives
-    void set_number_of_objectives(size_t & number_of_objectives)
+    void set_number_of_objectives(size_t &number_of_objectives)
     {
       this->number_of_objectives = 2;
       number_of_objectives = this->number_of_objectives;
     }
 
     // any positive value
-    void set_number_of_parameters(size_t & number_of_parameters)
+    void set_number_of_parameters(size_t &number_of_parameters)
     {
       this->number_of_parameters = 3 * K; // just ignore the set value
       number_of_parameters = this->number_of_parameters;
     }
 
-    void get_param_bounds(vec_t & lower, vec_t & upper) const
+    void get_param_bounds(vec_t &lower, vec_t &upper) const
     {
 
       lower.clear();
@@ -70,28 +70,28 @@ namespace hicam
 
     }
 
-    double x(int i) {
+    double x(size_t i) {
     	return xs[i];
     }
 
-    double y(int i) {
+    double y(size_t i) {
     	return ys[i];
     }
 
-    double y_ref(int i) {
-    	return ys_ref[i];
+    double y_ref(size_t i) {
+      return ys_ref[i];
     }
 
-    double weight(size_t K, solution_t &sol) {
-    	return sol.param[3 * K];
+    double weight(size_t k, solution_t &sol) {
+	return sol.param[3 * k];
     }
 
-    double mu(size_t K, solution_t &sol) {
-    	return sol.param[3 * K + 1];
+    double mu(size_t k, solution_t &sol) {
+	return sol.param[3 * k + 1];
     }
 
-    double sigma(size_t K, solution_t &sol) {
-    	return sol.param[3 * K + 2];
+    double sigma(size_t k, solution_t &sol) {
+	return sol.param[3 * k + 2];
     }
 
     double _rbf(double x, double mu, double sigma) {
@@ -106,15 +106,8 @@ namespace hicam
     	return val;
     }
 
-    void define_problem_evaluation(solution_t & sol)
+    void define_problem_evaluation(solution_t &sol)
     {
-
-      // std::cout << "Printing " << number_of_parameters << " params.." << std::endl;
-      // for (int i = 0; i < number_of_parameters; i++) {
-      //   std::cout << sol.param[i] << " ";
-      // }
-      // std::cout << std::endl;
-
     	/**
     	 * structure of parameters:
     	 * for K in {0, 3, 6, ...}
@@ -128,16 +121,15 @@ namespace hicam
 
     	// f0 : goodness of fit (bias?)
     	double bias = 0.f;
-    	for (int i = 0; i < xs.size(); i++) {
-    		bias += pow(abs(y(i) - r(x(i), sol)), 2);
+	for (size_t i = 0; i < xs.size(); i++) {
+		double r_val = r(x(i), sol);
+		bias += pow(abs(y(i) - r_val), 2);
     	}
-    	bias /= xs.size();
-    	sol.obj[0] = bias;
+	sol.obj[0] = bias / xs.size();
 
 	    // f1 : smoothness of the obtained result (variance?)
-
 	    double variance = 0.f;
-	    for (int i = 0; i < K; i++) {
+	    for (size_t i = 0; i < K; i++) {
 	    	variance += pow(abs(weight(i, sol)), 2);
 	    }
 	    sol.obj[1] = variance / K;
